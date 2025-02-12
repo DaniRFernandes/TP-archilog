@@ -1,7 +1,7 @@
 import uuid
 import sqlite3
 
-
+from sqlalchemy import *
 from dataclasses import dataclass
 
 
@@ -11,6 +11,21 @@ class Item:
     name: str
     category: str
     value: float
+
+
+engine = create_engine("sqlite:///storage/archilog.db")
+metadata = MetaData()
+
+items = Table(
+    "items", metadata,
+    Column("id", UUID, primary_key=True, default=uuid.uuid4),
+    Column("name", String, nullable=False),
+    Column("category", String, default="unspecified"),
+    Column("value", Float, nullable=False)
+)
+
+def init_db():
+    metadata.create_all(engine)
 
 def insert(id: str, name: str, category: str, value: float):
     db = sqlite3.connect("storage/items.db")

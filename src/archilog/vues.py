@@ -13,6 +13,11 @@ def cli():
     pass
 
 @cli.command()
+def init_db():
+    models.init_db()
+    print("Database created.")
+
+@cli.command()
 @click.option("-n", "--name",
               prompt="Name",
               help="The name of the item.")
@@ -23,7 +28,7 @@ def cli():
               prompt="Value",
               help="The value of the item.")
 def create(name: str, category: str, value: float):
-    item = models.insert(name, category, value)
+    item = models.insert(None, name, category, value)
     print(f"Inserted item: {item} rows")
 
 @cli.command()
