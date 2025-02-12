@@ -1,0 +1,17 @@
+# Project specific
+data/
+storage/
+
+# Compile Python files
+*.pyc
+
+# Python Virtual Environment
+.venv
+
+# PDM
+.pdm-build
+.pdm-python
+pdm.lock
+
+# IDEA
+.idea
