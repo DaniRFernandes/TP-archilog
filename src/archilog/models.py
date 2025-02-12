@@ -28,22 +28,19 @@ def init_db():
     metadata.create_all(engine)
 
 def insert(id: str, name: str, category: str, value: float):
-    db = sqlite3.connect("storage/items.db")
-    db.execute("CREATE TABLE IF NOT EXISTS items(id, name, category, value)")
-
     if id:
         item = Item(uuid.UUID(id), name, category, value)
     else:
         item = Item(uuid.uuid4(), name, category, value)
 
-    if item.category:
-        db.execute("INSERT INTO items VALUES (?, ?, ?, ?)",
-                   (str(item.id), item.name, item.category, item.value))
-    else:
-        db.execute("INSERT INTO items (id, name, value) VALUES (?, ?, ?)",
-                   (str(item.id), item.name, item.value))
+    with engine.connect() as conn:
+        if item.category:
+            ins = items.insert().values(id=item.id, name=item.name, category=item.category, value=item.value)
+        else:
+            ins = items.insert().values(id=item.id, name=item.name, value=item.value)
 
-    db.commit()
+        conn.execute(ins)
+        conn.commit()
 
     return item
 
