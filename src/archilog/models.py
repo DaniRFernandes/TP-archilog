@@ -44,48 +44,26 @@ def insert(id: str, name: str, category: str, value: float):
 
     return item
 
-def read_where(id: str, name: str, category: str, value: str):
-    query = ""
-    values = []
+def select(id: str, name: str, category: str, value: str):
+    sel = items.select()
 
-    if id:
-        query += " WHERE id = ?"
-        values.append(id)
+    with engine.connect() as conn:
+        if id:
+            sel = sel.where(items.c.id == id)
 
         if name:
-            query += " AND name = ?"
-            values.append(name)
+            sel = sel.where(items.c.name == name)
 
         if category:
-            query += " AND category = ?"
-            values.append(category)
-    elif name:
-        query += " WHERE name = ?"
-        values.append(name)
+            sel = sel.where(items.c.category == category)
 
-        if category:
-            query += " AND category = ?"
-            values.append(category)
-    elif category:
-        query += " WHERE category = ?"
-        values.append(category)
+        if value:
+            sel = sel.where(items.c.value == value)
 
-    return query, values
+        result = conn.execute(sel)
 
-def select(id: str, name: str, category: str, value: str):
-    db = sqlite3.connect("storage/items.db")
-    db.execute("CREATE TABLE IF NOT EXISTS items(id, name, category, value)")
-
-    where = read_where(id, name, category, value)
-    query, values = "SELECT * FROM items" + where[0], where[1]
-
-    items_table = db.execute(query, values).fetchall()
-    nb_selected_rows = 0
-
-    for row in items_table:
-        item = Item(row[0], row[1], row[2], row[3])
-        nb_selected_rows += 1
-        print(item)
+        items_table = result.fetchall()
+        nb_selected_rows = len(items_table)
 
     return items_table, nb_selected_rows
 

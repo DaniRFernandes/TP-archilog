@@ -41,7 +41,11 @@ def create(name: str, category: str, value: float):
 @click.option("-v", "--value",
               help="The value of the items to read.")
 def read(id: str, name: str, category: str, value: str):
-    changes = models.select(id, name, category, value)[1]
+    result, changes = models.select(id, name, category, value)
+
+    for row in result:
+        print(row)
+
     print(f"Amount of rows selected: {changes} rows")
 
 @cli.command()
