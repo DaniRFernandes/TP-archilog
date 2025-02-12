@@ -1,0 +1,27 @@
+Metadata-Version: 2.1
+Name: archilog
+Version: 0.1
+Summary: A simple project for educational purpose.
+License: MIT
+Requires-Python: >=3.10
+Requires-Dist: click>=8.1.7
+Description-Content-Type: text/markdown
+
+# archilog
+
+A simple project for educational purpose.
+
+```bash
+$ pip install pdm       # Python Dependency Manager is recommended
+$ pdm install           # install project dependencies
+$ pdm run archilog      # run the project
+Usage: archilog [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  display
+```
+
+Course & examples : [https://kathode.neocities.org](https://kathode.neocities.org)

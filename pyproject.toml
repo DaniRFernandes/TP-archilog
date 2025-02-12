@@ -1,0 +1,23 @@
+[project]
+name = "archilog"
+version = "0.1"
+description = "A simple project for educational purpose."
+readme = "README.md"
+dependencies = [
+    "click>=8.1.7",
+]
+requires-python = ">=3.10"
+
+[project.license]
+text = "MIT"
+
+[project.scripts]
+archilog = "archilog:cli"
+
+[build-system]
+requires = [
+    "pdm-backend",
+]
+build-backend = "pdm.backend"
+
+[tool]
