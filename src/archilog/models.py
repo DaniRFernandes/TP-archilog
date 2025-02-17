@@ -103,13 +103,24 @@ def update(id: str, name: str, category: str, value: float,
     return total_changes
 
 def delete(id: str, name: str, category: str, value: float):
-    db = sqlite3.connect("storage/items.db")
-    db.execute("CREATE TABLE IF NOT EXISTS items(id, name, category, value)")
+    with engine.connect() as conn:
+        dele = items.delete()
 
-    where = read_where(id, name, category, value)
-    query, values = "DELETE FROM items" + where[0], where[1]
+        if id:
+            dele = dele.where(items.c.id == id)
 
-    db.execute(query, values)
-    db.commit()
+        if name:
+            dele = dele.where(items.c.name == name)
 
-    return db.total_changes
+        if category:
+            dele = dele.where(items.c.category == category)
+
+        if value:
+            dele = dele.where(items.c.value == value)
+
+        result = conn.execute(dele)
+        conn.commit()
+
+        total_changes = result.rowcount
+
+    return total_changes
