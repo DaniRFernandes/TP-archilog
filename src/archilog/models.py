@@ -69,41 +69,38 @@ def select(id: str, name: str, category: str, value: str):
 
 def update(id: str, name: str, category: str, value: float,
            new_name: str, new_category: str, new_value: float):
-    db = sqlite3.connect("storage/items.db")
-    db.execute("CREATE TABLE IF NOT EXISTS items(id, name, category, value)")
+    with engine.connect() as conn:
+        upd = items.update()
 
-    query = "UPDATE items"
-    values = []
+        # WHERE clause
+        if id:
+            upd = upd.where(items.c.id == id)
 
-    if new_name:
-        query += " SET name = ?"
-        values.append(new_name)
+        if name:
+            upd = upd.where(items.c.name == name)
+
+        if category:
+            upd = upd.where(items.c.category == category)
+
+        if value:
+            upd = upd.where(items.c.value == value)
+
+        # VALUES clause
+        if new_name:
+            upd = upd.values(name=new_name)
 
         if new_category:
-            query += ", category = ?"
-            values.append(new_category)
+            upd = upd.values(category=new_category)
 
         if new_value:
-            query += ", value = ?"
-            values.append(new_value)
-    elif new_category:
-        query += " SET category = ?"
-        values.append(new_category)
+            upd = upd.values(value=new_value)
 
-        if new_value:
-            query += ", value = ?"
-            values.append(new_value)
-    elif new_value:
-        query += " SET value = ?"
-        values.append(new_value)
+        result = conn.execute(upd)
+        conn.commit()
 
-    where = read_where(id, name, category, value)
-    query, values = query + where[0], values + where[1]
+        total_changes = result.rowcount
 
-    db.execute(query, values)
-    db.commit()
-
-    return db.total_changes
+    return total_changes
 
 def delete(id: str, name: str, category: str, value: float):
     db = sqlite3.connect("storage/items.db")
