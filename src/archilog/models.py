@@ -1,5 +1,4 @@
 import uuid
-import sqlite3
 
 from sqlalchemy import *
 from dataclasses import dataclass
