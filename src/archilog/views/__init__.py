@@ -1,1 +1,1 @@
-from cli import cli
+from archilog.views.cli import cli
