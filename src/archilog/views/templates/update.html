@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>archilog - Update items</title>
+</head>
+<body>
+<header role="banner" style="margin-bottom: 20px">
+    <h1>archilog</h1>
+    <h2>Update items</h2>
+    <a href="{{ url_for('select_page') }}">
+        <button>Select items</button>
+    </a>
+</header>
+<main role="main">
+    <form method="post">
+        <label for="name">Name</label>
+        <input id="name" name="name" type="text">
+
+        <label for="category">Category</label>
+        <input id="category" name="category" type="text">
+
+        <label for="value">Value</label>
+        <input id="value" name="value" type="number" step=".01">
+
+        <button type="submit">Update</button>
+    </form>
+</main>
+</body>
+</html>

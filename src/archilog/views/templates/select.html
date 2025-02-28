@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>archilog - Select items</title>
+</head>
+<body>
+<header role="banner" style="margin-bottom: 20px">
+    <h1>archilog</h1>
+    <h2>Select items</h2>
+    <a href="{{ url_for('create_page') }}">
+        <button>Insert new item</button>
+    </a>
+</header>
+<main role="main">
+    <form action="{{ url_for('select_page') }}" method="post">
+        <label for="input-name">Name</label>
+        <input id="input-name" name="input-name" type="text">
+
+        <label for="input-category">Category</label>
+        <input id="input-category" name="input-category" type="text">
+
+        <label for="input-value">Value</label>
+        <input id="input-value" name="input-value" type="number" step=".01">
+
+        <button type="submit">Select</button>
+    </form>
+
+    <div>
+        <p>Amount of rows selected: {{ nb_selected_rows }} rows</p>
+
+        {% if nb_selected_rows != 0 %}
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Value</th>
+                <th></th>
+                <th></th>
+            </tr>
+            {% for item in items_table %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.category }}</td>
+                <td>{{ item.value }}</td>
+                <td>
+                    <a href="{{ url_for('update_page', update_id=item.id) }}">
+                        <button class="update-button">Update</button>
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ url_for('select_page', delete_id=item.id) }}">
+                        <button class="delete-button">Delete</button>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+    </div>
+</main>
+</body>
+</html>
