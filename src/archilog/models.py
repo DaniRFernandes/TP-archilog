@@ -73,7 +73,7 @@ def update(id: str, name: str, category: str, value: float,
 
         # WHERE clause
         if id:
-            upd = upd.where(items.c.id == id)
+            upd = upd.where(items.c.id == uuid.UUID(id))
 
         if name:
             upd = upd.where(items.c.name == name)
