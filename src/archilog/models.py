@@ -106,7 +106,7 @@ def delete(id: str, name: str, category: str, value: float):
         dele = items.delete()
 
         if id:
-            dele = dele.where(items.c.id == id)
+            dele = dele.where(items.c.id == uuid.UUID(id))
 
         if name:
             dele = dele.where(items.c.name == name)
