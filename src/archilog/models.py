@@ -48,7 +48,7 @@ def select(id: str, name: str, category: str, value: str):
 
     with engine.connect() as conn:
         if id:
-            sel = sel.where(items.c.id == id)
+            sel = sel.where(items.c.id == uuid.UUID(id))
 
         if name:
             sel = sel.where(items.c.name == name)
