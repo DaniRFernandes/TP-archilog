@@ -1,6 +1,10 @@
-from flask import Flask, request, render_template, redirect, url_for
+import os
+
+from flask import Flask, request, render_template, redirect, url_for, send_from_directory
+from unearth.fetchers import Response
 
 import archilog.models as models
+import archilog.services as services
 
 
 app = Flask(__name__)
@@ -67,3 +71,21 @@ def update_page(update_id=None):
     models.update(update_id, None, None, None, name, category, value)
 
     return redirect(url_for("select_page"))
+
+@app.route("/csv/")
+@app.route("/csv/", methods=["POST"])
+def csv_page():
+    if "csv-import" in request.form:
+        csv_import = request.files["csv-import"]
+        services.import_web(csv_import.stream, "CSV")
+
+        return redirect(url_for("select_page"))
+    elif "export-submit" in request.form:
+        output = services.export_web()
+
+        response = Response(output.getvalue(), mimetype="text/csv")
+        response.headers["Content-Disposition"] = "attachment; filename=entries.csv"
+
+        return response
+
+    return render_template("csv.html")
