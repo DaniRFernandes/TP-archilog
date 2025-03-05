@@ -58,10 +58,10 @@ def export_web():
 
 def import_web(input_stream):
     csv_reader = csv.reader(input_stream.read().decode("utf-8").splitlines())
-    header = next(csv_reader)
+    models.delete(None, None, None, None)
 
     for row in csv_reader:
         id, name, category, value = row
-        amount = float(amount)
+        value = float(value)
 
         models.insert(id, name, category, value)

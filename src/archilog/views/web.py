@@ -74,9 +74,9 @@ def update_page(update_id=None):
 @app.route("/csv/")
 @app.route("/csv/", methods=["POST"])
 def csv_page():
-    if "csv-import" in request.form:
+    if "csv-import" in request.files:
         csv_import = request.files["csv-import"]
-        services.import_web(csv_import.stream, "CSV")
+        services.import_web(csv_import)
 
         return redirect(url_for("select_page"))
     elif "export-submit" in request.form:

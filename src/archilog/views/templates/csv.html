@@ -24,7 +24,7 @@
     <div id="parent-div">
         <form action="{{ url_for('csv_page') }}" enctype="multipart/form-data" method="post">
             <label for="csv-import">Import a CSV file</label>
-            <input id="csv-import" name="csv-import" type="file" accept="text/csv">
+            <input id="csv-import" name="csv-import" type="file" accept="text/csv" required>
 
             <button type="submit">Import</button>
         </form>
