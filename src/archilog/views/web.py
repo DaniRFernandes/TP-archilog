@@ -1,7 +1,6 @@
 import os
 
-from flask import Flask, request, render_template, redirect, url_for, send_from_directory
-from unearth.fetchers import Response
+from flask import Flask, request, render_template, redirect, url_for, Response
 
 import archilog.models as models
 import archilog.services as services

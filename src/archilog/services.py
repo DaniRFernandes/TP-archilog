@@ -42,7 +42,7 @@ def export_web():
     csv_writer = csv.DictWriter(output, fieldnames=[f.name for f in dataclasses.fields(models.Item)])
     csv_writer.writeheader()
 
-    items_table = models.select()
+    items_table = models.select(None, None, None, None)[0]
 
     for item in items_table:
         csv_writer.writerow({
