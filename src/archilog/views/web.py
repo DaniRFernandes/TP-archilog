@@ -8,6 +8,12 @@ import archilog.services as services
 
 app = Flask(__name__)
 
+@app.route("/")
+def index_page():
+    models.init_db()
+
+    return redirect(url_for("select_page"))
+
 @app.route("/select/")
 @app.route("/select/", methods=["POST"])
 @app.route("/select/<delete_id>")
