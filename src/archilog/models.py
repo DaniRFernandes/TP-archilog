@@ -1,7 +1,8 @@
 import uuid
 
-from sqlalchemy import *
 from dataclasses import dataclass
+
+from sqlalchemy import create_engine, MetaData, Table, Column, String, Float, UUID
 
 
 @dataclass
