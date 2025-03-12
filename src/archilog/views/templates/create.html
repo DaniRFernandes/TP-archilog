@@ -8,12 +8,12 @@
 <header role="banner" style="margin-bottom: 20px">
     <h1>archilog</h1>
     <h2>Insert items</h2>
-    <a href="{{ url_for('select_page') }}">
+    <a href="{{ url_for('web_ui.select_page') }}">
         <button>Select items</button>
     </a>
 </header>
 <main role="main">
-    <form action="{{ url_for('create_page') }}" method="post">
+    <form action="{{ url_for('web_ui.create_page') }}" method="post">
         <label for="name">Name</label>
         <input id="name" name="name" type="text">
 

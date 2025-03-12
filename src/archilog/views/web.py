@@ -1,23 +1,27 @@
 import os
 
-from flask import Flask, request, render_template, redirect, url_for, Response
+from flask import request, render_template, redirect, url_for, Response, Blueprint
 
 import archilog.models as models
 import archilog.services as services
 
 
-app = Flask(__name__)
+web_ui = Blueprint("web_ui", __name__, url_prefix="/")
 
-@app.route("/")
+@web_ui.route("/<page>")
+def show(page):
+    return render_template(f"templates/{page}.html")
+
+@web_ui.route("/")
 def index_page():
     models.init_db()
 
-    return redirect(url_for("select_page"))
+    return redirect(url_for("web_ui.select_page"))
 
-@app.route("/select/")
-@app.route("/select/", methods=["POST"])
-@app.route("/select/<delete_id>")
-@app.route("/select/<delete_id>", methods=["POST"])
+@web_ui.route("/select/")
+@web_ui.route("/select/", methods=["POST"])
+@web_ui.route("/select/<delete_id>")
+@web_ui.route("/select/<delete_id>", methods=["POST"])
 def select_page(delete_id=None):
     name, category, value = None, None, None
 
@@ -37,8 +41,8 @@ def select_page(delete_id=None):
                            items_table=items_table,
                            nb_selected_rows=nb_selected_rows)
 
-@app.route("/create/")
-@app.route("/create/", methods=["POST"])
+@web_ui.route("/create/")
+@web_ui.route("/create/", methods=["POST"])
 def create_page():
     if "name" in request.form and "value" in request.form:
         name = request.form["name"]
@@ -53,8 +57,8 @@ def create_page():
 
     return render_template("create.html")
 
-@app.route("/update/<update_id>")
-@app.route("/update/<update_id>", methods=["POST"])
+@web_ui.route("/update/<update_id>")
+@web_ui.route("/update/<update_id>", methods=["POST"])
 def update_page(update_id=None):
     if not update_id:
         return redirect(url_for("select_page"))
@@ -77,8 +81,8 @@ def update_page(update_id=None):
 
     return redirect(url_for("select_page"))
 
-@app.route("/csv/")
-@app.route("/csv/", methods=["POST"])
+@web_ui.route("/csv/")
+@web_ui.route("/csv/", methods=["POST"])
 def csv_page():
     if "csv-import" in request.files:
         csv_import = request.files["csv-import"]

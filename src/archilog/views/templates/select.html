@@ -8,15 +8,15 @@
 <header role="banner" style="margin-bottom: 20px">
     <h1>archilog</h1>
     <h2>Select items</h2>
-    <a href="{{ url_for('create_page') }}">
+    <a href="{{ url_for('web_ui.create_page') }}">
         <button>Insert new item</button>
     </a>
-    <a href="{{ url_for('csv_page') }}">
+    <a href="{{ url_for('web_ui.csv_page') }}">
         <button>Import & export CSV</button>
     </a>
 </header>
 <main role="main">
-    <form action="{{ url_for('select_page') }}" method="post">
+    <form action="{{ url_for('web_ui.select_page') }}" method="post">
         <label for="input-name">Name</label>
         <input id="input-name" name="input-name" type="text">
 
@@ -47,12 +47,12 @@
                 <td>{{ item.category }}</td>
                 <td>{{ item.value }}</td>
                 <td>
-                    <a href="{{ url_for('update_page', update_id=item.id) }}">
+                    <a href="{{ url_for('web_ui.update_page', update_id=item.id) }}">
                         <button class="update-button">Update</button>
                     </a>
                 </td>
                 <td>
-                    <a href="{{ url_for('select_page', delete_id=item.id) }}">
+                    <a href="{{ url_for('web_ui.select_page', delete_id=item.id) }}">
                         <button class="delete-button">Delete</button>
                     </a>
                 </td>
