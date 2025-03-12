@@ -8,10 +8,6 @@ import archilog.services as services
 def cli():
     pass
 
-@click.group()
-def cli():
-    pass
-
 @cli.command()
 def init_db():
     models.init_db()
