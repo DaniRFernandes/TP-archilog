@@ -1,5 +1,14 @@
-from archilog.views import cli
+import os
+
+from dataclasses import dataclass
 
 
-if __name__ == "__main__":
-    cli()
+@dataclass
+class Config:
+    DATABASE_URL: str
+    DEBUG: bool
+
+config = Config(
+    DATABASE_URL=os.getenv("ARCHILOG_DATABASE_URL", ""),
+    DEBUG=os.getenv("ARCHILOG_DEBUG", "False") == "True"
+)

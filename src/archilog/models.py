@@ -1,6 +1,7 @@
 import uuid
 
 from dataclasses import dataclass
+from archilog import config
 
 from sqlalchemy import create_engine, MetaData, Table, Column, String, Float, UUID
 
@@ -13,7 +14,7 @@ class Item:
     value: float
 
 
-engine = create_engine("sqlite:///storage/archilog.db")
+engine = create_engine(config.DATABASE_URL, )
 metadata = MetaData()
 
 items = Table(
