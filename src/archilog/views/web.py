@@ -1,6 +1,6 @@
 import os
 
-from flask import request, render_template, redirect, url_for, Response, Blueprint
+from flask import request, render_template, redirect, url_for, Response, Blueprint, flash
 
 import archilog.models as models
 import archilog.services as services
@@ -11,6 +11,12 @@ web_ui = Blueprint("web_ui", __name__, url_prefix="/")
 @web_ui.route("/<page>")
 def show(page):
     return render_template(f"templates/{page}.html")
+
+@web_ui.errorhandler(500)
+def handle_internal_error(error):
+    flash("Erreur interne du serveur", "error")
+
+    return redirect(url_for("web_ui.index_page"))
 
 @web_ui.route("/")
 def index_page():
