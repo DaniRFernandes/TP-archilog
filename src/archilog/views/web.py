@@ -1,5 +1,3 @@
-import os
-
 from flask import request, render_template, redirect, url_for, Response, Blueprint, flash
 
 import archilog.models as models
