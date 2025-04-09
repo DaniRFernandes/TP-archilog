@@ -1,14 +1,32 @@
 from flask import request, render_template, redirect, url_for, Response, Blueprint, flash
 
+from flask_wtf import FlaskForm
+from wtforms import StringField, DecimalField
+from wtforms.validators import DataRequired, NumberRange
+
 import archilog.models as models
 import archilog.services as services
 
+
+class ItemForm(FlaskForm):
+    name = StringField("Name", validators=[DataRequired()])
+    category = StringField("Category")
+    value = DecimalField("Value", validators=[DataRequired(), NumberRange(min=0)])
 
 web_ui = Blueprint("web_ui", __name__, url_prefix="/")
 
 @web_ui.route("/<page>")
 def show(page):
     return render_template(f"templates/{page}.html")
+
+@web_ui.route("/submit", methods=["GET", "POST"])
+def submit():
+    form = ItemForm()
+
+    if form.validate_on_submit():
+        return redirect("/success")
+
+    return render_template("submit.html", form=form)
 
 @web_ui.errorhandler(500)
 def handle_internal_error(error):
@@ -48,6 +66,8 @@ def select_page(delete_id=None):
 @web_ui.route("/create/")
 @web_ui.route("/create/", methods=["POST"])
 def create_page():
+    form = ItemForm()
+
     if "name" in request.form and "value" in request.form:
         name = request.form["name"]
         value = request.form["value"]
@@ -59,18 +79,24 @@ def create_page():
             else:
                 models.insert(None, name, None, value)
 
-    return render_template("create.html")
+            return redirect(url_for("web_ui.select_page"))
+
+    return render_template("create.html", form=form)
 
 @web_ui.route("/update/<update_id>")
 @web_ui.route("/update/<update_id>", methods=["POST"])
 def update_page(update_id=None):
     if not update_id:
-        return redirect(url_for("select_page"))
+        return redirect(url_for("web_ui.select_page"))
+
+    item = models.select(update_id, None, None, None)[0][0]
+
+    form = ItemForm(name=item[1], category=item[2], value=item[3])
 
     name, category, value = None, None, None
 
     if "name" not in request.form:
-        return render_template("update.html")
+        return render_template("update.html", form=form)
 
     if len(request.form["name"]) > 0:
         name = request.form["name"]
@@ -83,7 +109,7 @@ def update_page(update_id=None):
 
     models.update(update_id, None, None, None, name, category, value)
 
-    return redirect(url_for("select_page"))
+    return redirect(url_for("web_ui.select_page"))
 
 @web_ui.route("/csv/")
 @web_ui.route("/csv/", methods=["POST"])
@@ -92,7 +118,7 @@ def csv_page():
         csv_import = request.files["csv-import"]
         services.import_web(csv_import)
 
-        return redirect(url_for("select_page"))
+        return redirect(url_for("web_ui.select_page"))
     elif "export-submit" in request.form:
         output = services.export_web()
 

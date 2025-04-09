@@ -14,14 +14,11 @@
 </header>
 <main role="main">
     <form action="{{ url_for('web_ui.create_page') }}" method="post">
-        <label for="name">Name</label>
-        <input id="name" name="name" type="text">
+        {{ form.csrf_token }}
 
-        <label for="category">Category</label>
-        <input id="category" name="category" type="text">
-
-        <label for="value">Value</label>
-        <input id="value" name="value" type="number" step=".01">
+        {{ form.name.label }}       {{ form.name(size=20) }}
+        {{ form.category.label }}   {{ form.category(size=20) }}
+        {{ form.value.label }}      {{ form.value(size=20) }}
 
         <button type="submit">Insert</button>
     </form>
