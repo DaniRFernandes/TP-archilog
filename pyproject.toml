@@ -9,6 +9,7 @@ dependencies = [
     "flask-wtf>=1.2.2",
     "wtforms>=3.2.1",
     "flask-httpauth>=4.8.0",
+    "spectree>=1.4.5",
 ]
 requires-python = ">=3.10"
 
