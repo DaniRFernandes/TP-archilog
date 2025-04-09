@@ -4,6 +4,9 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, DecimalField
 from wtforms.validators import DataRequired, NumberRange
 
+from flask_httpauth import HTTPBasicAuth
+from werkzeug.security import generate_password_hash, check_password_hash
+
 import archilog.models as models
 import archilog.services as services
 import logging
@@ -15,8 +18,26 @@ class ItemForm(FlaskForm):
     value = DecimalField("Value", validators=[DataRequired(), NumberRange(min=0)])
 
 web_ui = Blueprint("web_ui", __name__, url_prefix="/")
+auth = HTTPBasicAuth()
 
+users = {
+    "admin": generate_password_hash("admin"),
+    "john": generate_password_hash("hello")
+}
 
+roles = {
+    "admin": ["admin", "user"],
+    "john": ["user"]
+}
+
+@auth.verify_password
+def verify_password(username, password):
+    if username in users and check_password_hash(users.get(username), password):
+        return username
+
+@auth.get_user_roles
+def get_user_roles(username):
+    return roles[username]
 
 @web_ui.route("/<page>")
 def show(page):
@@ -39,10 +60,16 @@ def handle_internal_error(error):
     return redirect(url_for("web_ui.index_page"))
 
 @web_ui.route("/")
+@auth.login_required
 def index_page():
     models.init_db()
 
     return redirect(url_for("web_ui.select_page"))
+
+@web_ui.route("/admin")
+@auth.login_required(role="admin")
+def admins_only():
+    return f"Hello {auth.current_user()}, you are an admin!"
 
 @web_ui.route("/select/")
 @web_ui.route("/select/", methods=["POST"])

@@ -14,6 +14,13 @@
     <a href="{{ url_for('web_ui.csv_page') }}">
         <button>Import & export CSV</button>
     </a>
+    {% if username is defined %}
+    <h3>Welcome {{ username }}</h3>
+    {% endif %}
+
+    <a href="http://log:out@localhost:5000">
+        <button>Log out</button>
+    </a>
 </header>
 <main role="main">
     <form action="{{ url_for('web_ui.select_page') }}" method="post">
