@@ -6,6 +6,8 @@ readme = "README.md"
 dependencies = [
     "click>=8.1.7",
     "flask>=3.1.0",
+    "flask-wtf>=1.2.2",
+    "wtforms>=3.2.1",
 ]
 requires-python = ">=3.10"
 
