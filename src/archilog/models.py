@@ -14,7 +14,7 @@ class Item:
     value: float
 
 
-engine = create_engine(config.DATABASE_URL, config.DEBUG)
+engine = create_engine(config.DATABASE_URL, echo=config.DEBUG)
 metadata = MetaData()
 
 items = Table(
