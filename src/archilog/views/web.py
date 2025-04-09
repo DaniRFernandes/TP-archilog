@@ -6,6 +6,7 @@ from wtforms.validators import DataRequired, NumberRange
 
 import archilog.models as models
 import archilog.services as services
+import logging
 
 
 class ItemForm(FlaskForm):
@@ -14,6 +15,8 @@ class ItemForm(FlaskForm):
     value = DecimalField("Value", validators=[DataRequired(), NumberRange(min=0)])
 
 web_ui = Blueprint("web_ui", __name__, url_prefix="/")
+
+
 
 @web_ui.route("/<page>")
 def show(page):
@@ -31,6 +34,7 @@ def submit():
 @web_ui.errorhandler(500)
 def handle_internal_error(error):
     flash("Erreur interne du serveur", "error")
+    logging.exception(error)
 
     return redirect(url_for("web_ui.index_page"))
 
