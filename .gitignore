@@ -2,6 +2,7 @@
 data/
 storage/
 env/
+*.log
 
 # Compile Python files
 *.pyc
